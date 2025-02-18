@@ -1,0 +1,30 @@
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Session {
+  sessionId String   @unique @map("token")
+  expiresAt DateTime
+  userId    String
+  User      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model User {
+  id              String    @id @default(cuid())
+  username        String?
+  email           String?   @unique
+  emailVerifiedAt DateTime?
+  hashedPassword  String?
+  github_id       Int?      @unique
+  Session         Session[]
+
+  @@unique([email, github_id])
+}

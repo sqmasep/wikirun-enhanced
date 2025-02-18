@@ -1,0 +1,23 @@
+{
+  "name": "websocket-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch ./src/index.ts",
+    "build": "echo 'Add build script here'",
+    "test": "echo 'Add test script here'",
+    "lint": "echo 'Add lint script here'"
+  },
+  "dependencies": {
+    "@hono/valibot-validator": "^0.5.1",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
+    "@repo/database": "*",
+    "@repo/validation": "*",
+    "arctic": "^2.3.3",
+    "hono": "^4.6.15"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

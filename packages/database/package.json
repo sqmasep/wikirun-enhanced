@@ -1,0 +1,27 @@
+{
+  "name": "@repo/database",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Add dev script here'",
+    "build": "echo 'Add build script here'",
+    "test": "echo 'Add test script here'",
+    "lint": "echo 'Add lint script here'",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
+    "db:validate": "prisma validate"
+  },
+  "exports": {
+    "./utils/*": "./src/utils/*.ts",
+    "./client": "./src/client.ts"
+  },
+  "devDependencies": {
+    "prisma": "^6.1.0"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.0.2",
+    "@prisma/client": "^6.1.0"
+  }
+}
