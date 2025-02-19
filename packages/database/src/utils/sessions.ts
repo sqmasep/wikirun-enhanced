@@ -1,5 +1,5 @@
-import { encodeHexLowerCase } from "@oslojs/encoding";
 import { db } from "../client";
+import { encodeHexLowerCase } from "@oslojs/encoding";
 import { sha256 } from "@oslojs/crypto/sha2";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 24 * 7; // 1 week
