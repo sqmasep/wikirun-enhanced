@@ -31,10 +31,12 @@ export function setSessionTokenCookie(
 }
 
 export async function validateSessionToken(token: string) {
-  // WARN this commented line is from the guide. however i also added the encoding step
-  // WARN in the database/utils/sessions.ts file. idk which function should use this encoding
-  // const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  const sessionId = token;
+  // // WARN this commented line is from the guide. however i also added the encoding step
+  // // WARN in the database/utils/sessions.ts file. idk which function should use this encoding
+  // WARN for some reason i had to uncomment this line, it wasn't working with the encoding,
+  // WARN then it worked without encoding, then it didn't work without encoding. Had to add it back
+  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  // const sessionId = token;
 
   const result = await db.session.findUnique({
     where: { id: sessionId },
