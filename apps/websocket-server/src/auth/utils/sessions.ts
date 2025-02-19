@@ -1,20 +1,18 @@
 import { getCookie, setCookie } from "hono/cookie";
-import { encodeBase32, encodeHexLowerCase } from "@oslojs/encoding";
+import {
+  encodeBase32LowerCaseNoPadding,
+  encodeHexLowerCase,
+} from "@oslojs/encoding";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { Session, User, db } from "@repo/database/client";
 
-export function generateSessionToken() {
+export function generateSessionToken(): string {
   const tokenBytes = new Uint8Array(20);
   crypto.getRandomValues(tokenBytes);
 
-  const token = encodeBase32(tokenBytes).toLowerCase();
+  const token = encodeBase32LowerCaseNoPadding(tokenBytes);
 
   return token;
-
-  // const randomBytes = new Uint8Array(15);
-  // crypto.getRandomValues(randomBytes);
-
-  // return btoa(String.fromCharCode(...randomBytes));
 }
 
 export function setSessionTokenCookie(
@@ -33,35 +31,25 @@ export function setSessionTokenCookie(
 }
 
 export async function validateSessionToken(token: string) {
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  // WARN this commented line is from the guide. however i also added the encoding step
+  // WARN in the database/utils/sessions.ts file. idk which function should use this encoding
+  // const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  const sessionId = token;
 
-  const row = await db.session.findFirst({
-    where: { sessionId },
+  const result = await db.session.findUnique({
+    where: { id: sessionId },
     include: { User: true },
   });
 
-  if (row === null) {
+  if (result === null) {
     return { session: null, user: null };
   }
 
-  const session: Session = {
-    sessionId: row.sessionId,
-    userId: row.userId,
-    expiresAt: row.expiresAt,
-  };
+  const { User, ...session } = result;
 
-  const user: User = {
-    id: row.User.id,
-    github_id: row.User.github_id,
-    username: row.User.username,
-    email: row.User.email,
-    emailVerifiedAt: row.User.emailVerifiedAt,
-    hashedPassword: row.User.hashedPassword,
-  };
-
-  if (Date.now() >= row.expiresAt.getTime()) {
-    db.session.delete({
-      where: { sessionId },
+  if (Date.now() >= session.expiresAt.getTime()) {
+    await db.session.delete({
+      where: { id: sessionId },
     });
 
     return { session: null, user: null };
@@ -69,12 +57,14 @@ export async function validateSessionToken(token: string) {
 
   if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
     session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
-    db.execute("UPDATE session SET expires_at = ? WHERE session.id = ?", [
-      Math.floor(session.expiresAt.getTime() / 1000),
-      session.id,
-    ]);
+
+    await db.session.update({
+      where: { id: session.id },
+      data: { expiresAt: session.expiresAt },
+    });
   }
-  return { session, user };
+
+  return { session, user: User };
 }
 
 export async function getCurrentSession() {

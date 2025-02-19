@@ -9,9 +9,9 @@ generator client {
 }
 
 model Session {
-  sessionId String   @unique @map("token")
-  expiresAt DateTime
+  id        String   @id
   userId    String
+  expiresAt DateTime
   User      User     @relation(fields: [userId], references: [id])
 
   @@index([userId])

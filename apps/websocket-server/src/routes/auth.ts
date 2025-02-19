@@ -71,6 +71,8 @@ const authRoutes = new Hono()
       // try to find user from db
       const existingUser = await findUserByGithubId(githubUserId);
 
+      // TODO [REFACTOR] findOrCreate?
+
       // if user already exists, only create a session
       if (existingUser !== null) {
         const sessionToken = generateSessionToken();

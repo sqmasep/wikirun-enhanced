@@ -18,10 +18,12 @@
     "./client": "./src/client.ts"
   },
   "devDependencies": {
-    "prisma": "^6.1.0"
+    "prisma": "^6.4.0"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",
-    "@prisma/client": "^6.1.0"
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
+    "@prisma/client": "^6.4.0"
   }
 }
