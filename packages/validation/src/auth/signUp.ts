@@ -15,3 +15,6 @@ export const signUpSchema = v.pipe(
     "passwords do not match"
   )
 );
+
+export type SignUpSchemaInput = v.InferInput<typeof signUpSchema>;
+export type SignUpSchemaOutput = v.InferOutput<typeof signUpSchema>;

@@ -6,3 +6,6 @@ export const signInSchema = v.object({
   email: emailSchema,
   password: passwordSchema,
 });
+
+export type SignInSchemaInput = v.InferInput<typeof signInSchema>;
+export type SignInSchemaOutput = v.InferOutput<typeof signInSchema>;
