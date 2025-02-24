@@ -15,14 +15,13 @@ const usersRoutes = new Hono()
       });
     }
 
-    console.log("token is not null or undefined");
-
     const { session, user } = await validateSessionToken(token);
 
-    console.log(token);
-    console.log(session, user);
+    console.log("/users/me token:", token);
+    console.log("/users/me session/user:", session, user);
 
     return c.json({
+      // DANGER user is not sanitized
       user,
       session,
       message: `Hello, world! ${token}`,
@@ -31,6 +30,20 @@ const usersRoutes = new Hono()
   .post("/change-username", c => {
     const cookie = getCookie(c, "session_id");
     return c.json({ message: `posted successfully, cookie is: ${cookie}` });
+  })
+  .post("/change-profile-picture", async c => {
+    const token = getCookie(c, "session_id");
+
+    if (token === null || token === undefined) {
+      return c.json({ message: "You are not logged in" });
+    }
+
+    const { user } = await validateSessionToken(token);
+
+    const body = await c.req.parseBody();
+    console.log(body["file"]);
+
+    return c.json({ message: `posted successfully` });
   });
 
 export default usersRoutes;

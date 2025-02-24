@@ -16,3 +16,10 @@ export async function findUserByEmail(email: string) {
     where: { email },
   });
 }
+
+export async function changeUsername(userId: string, username: string) {
+  return db.user.update({
+    where: { id: userId },
+    data: { username },
+  });
+}

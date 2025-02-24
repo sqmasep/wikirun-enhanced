@@ -6,6 +6,7 @@ const EXPIRES_IN = 1000 * 60 * 60 * 24 * 7; // 1 week
 
 export async function createSession(token: string, userId: string) {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+
   return db.session.create({
     data: {
       id: sessionId,

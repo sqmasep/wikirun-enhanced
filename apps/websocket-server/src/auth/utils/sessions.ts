@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from "hono/cookie";
+import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
@@ -27,6 +27,14 @@ export function setSessionTokenCookie(
     domain: process.env.COOKIE_DOMAIN,
     path: "/",
     sameSite: "lax",
+  });
+}
+
+export function deleteSessionTokenCookie(
+  c: Parameters<typeof deleteCookie>[0]
+) {
+  deleteCookie(c, "session_id", {
+    domain: process.env.COOKIE_DOMAIN,
   });
 }
 

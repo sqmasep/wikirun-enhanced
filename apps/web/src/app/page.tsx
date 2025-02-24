@@ -1,9 +1,9 @@
 import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
 import SignUpWithGithubButton from "../features/auth/components/SignInWithGithubButton";
 import { apiClient } from "../lib/apiClient";
 import Test from "../components/Test";
 import { cookies } from "next/headers";
+import Navbar from "../layouts/Navbar";
 
 export default async function Home() {
   const a = (await cookies()).get("session_id")!;
@@ -24,7 +24,8 @@ export default async function Home() {
   console.log("response via api    ", data);
 
   return (
-    <div className={styles.page}>
+    <div>
+      <Navbar />
       {data.user ? (
         <div>
           <h1>Hello, {data.user.username}!</h1>
@@ -33,7 +34,6 @@ export default async function Home() {
         <div>You are not logged in</div>
       )}
       <Test />
-      <SignUpWithGithubButton />
     </div>
   );
 }

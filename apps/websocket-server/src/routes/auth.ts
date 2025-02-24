@@ -17,11 +17,16 @@ import { signInSchema } from "@repo/validation/auth/signIn";
 import { signUpSchema } from "@repo/validation/auth/signUp";
 
 import {
+  deleteSessionTokenCookie,
   generateSessionToken,
   setSessionTokenCookie,
+  validateSessionToken,
 } from "../auth/utils/sessions";
 
-import { createSession } from "@repo/database/utils/sessions";
+import {
+  createSession,
+  invalidateSession,
+} from "@repo/database/utils/sessions";
 
 const OAUTH_STATE_MAX_AGE = 60 * 10; // 10 min
 
@@ -114,7 +119,7 @@ const authRoutes = new Hono()
 
     // TODO use zxcvbn to check for weak passwords
     // TODO detect leaked passwords with haveibeenpwned
-    // see https://thecopenhagenbook.com/password-authentication
+    // TODO see https://thecopenhagenbook.com/password-authentication
 
     const hashedPassword = await hashPassword(password);
     const existingUser = await findUserByEmail(email);
@@ -126,6 +131,8 @@ const authRoutes = new Hono()
 
     // create a new user in the db
     const newUser = await createUser({ email, hashedPassword, username });
+
+    // TODO i should send a confirmation email here probably
 
     // create a session
     const sessionToken = generateSessionToken();
@@ -139,13 +146,13 @@ const authRoutes = new Hono()
     const { email, password } = c.req.valid("json");
 
     // TODO add IP-address based rate limiting
-    // see https://thecopenhagenbook.com/password-authentication#:~:text=A%20basic%20example%20is%20to%20block%20all%20attempts%20from%20an%20IP%20address%20for%2010%20minutes%20after%20they%20fail%2010%20consecutive%20attempts
+    // TODO see https://thecopenhagenbook.com/password-authentication#:~:text=A%20basic%20example%20is%20to%20block%20all%20attempts%20from%20an%20IP%20address%20for%2010%20minutes%20after%20they%20fail%2010%20consecutive%20attempts
 
     const user = await findUserByEmail(email);
 
     if (user === null) {
       // WARN early return may expose timing attacks
-      // see: https://thecopenhagenbook.com/password-authentication#:~:text=Even%20when%20returning%20a%20generic%20message%20however%2C%20it%20may%20be%20possible%20to%20determine%20if%20a%20user%20exists%20or%20not%20by%20checking%20the%20response%20times.%20For%20example%2C%20if%20you%20only%20validate%20the%20password%20when%20the%20username%20is%20valid
+      // WARN see: https://thecopenhagenbook.com/password-authentication#:~:text=Even%20when%20returning%20a%20generic%20message%20however%2C%20it%20may%20be%20possible%20to%20determine%20if%20a%20user%20exists%20or%20not%20by%20checking%20the%20response%20times.%20For%20example%2C%20if%20you%20only%20validate%20the%20password%20when%20the%20username%20is%20valid
       return c.json({
         success: false,
         error: "Incorrect username or password",
@@ -169,6 +176,21 @@ const authRoutes = new Hono()
     setSessionTokenCookie(c, sessionToken, session.expiresAt);
 
     return c.json({ success: true, email, userId: user.id });
+  })
+  .post("/logout", async c => {
+    // TODO i should use the cached function instead
+    // TODO const { session } = await getCurrentSession();
+    const token = getCookie(c, "session_id");
+    const { session } = await validateSessionToken(token!);
+
+    if (session === null) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+
+    await invalidateSession(session.id);
+    deleteSessionTokenCookie(c);
+
+    return c.redirect(process.env.WEBAPP_URL!);
   });
 
 export default authRoutes;

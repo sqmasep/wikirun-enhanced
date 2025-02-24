@@ -5,23 +5,14 @@ import {
   SignUpSchemaOutput,
 } from "@repo/validation/auth/signUp";
 import { useForm } from "react-hook-form";
-import { apiClient } from "../../../lib/apiClient";
+import { apiClient } from "#/lib/apiClient";
+import { redirect } from "next/navigation";
+import { signUp } from "../actions";
 
 export default function useSignUpForm() {
   const form = useForm<SignUpSchemaInput>({
     resolver: valibotResolver(signUpSchema),
   });
-
-  async function signUp(data: SignUpSchemaOutput) {
-    await apiClient.auth["sign-up"].$post({
-      json: {
-        email: data.email,
-        username: data.username,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-      },
-    });
-  }
 
   return { form, signUp };
 }
