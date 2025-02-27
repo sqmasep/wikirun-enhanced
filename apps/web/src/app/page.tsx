@@ -26,6 +26,7 @@ export default async function Home() {
   return (
     <div>
       <Navbar />
+
       {data.user ? (
         <div>
           <h1>Hello, {data.user.username}!</h1>

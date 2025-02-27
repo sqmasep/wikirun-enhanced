@@ -34,5 +34,7 @@ const buttonVariants = tv({
 export function Button({ asChild, size, color, ...props }: ButtonProps) {
   const Comp = asChild ? Slot : "button";
 
-  return <Comp {...props} className={buttonVariants({ size, color })} />;
+  return (
+    <Comp {...props} className="bg-jar-400 rounded-lg text-white px-3 py-1.5" />
+  );
 }

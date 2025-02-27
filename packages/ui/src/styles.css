@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@source "./";
+
+@theme {
+  --color-jar-400: rebeccapurple;
+}
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+}
