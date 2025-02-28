@@ -12,7 +12,7 @@ export const signUpSchema = v.pipe(
   }),
   v.check(
     input => input.password === input.confirmPassword,
-    "passwords do not match"
+    "Passwords do not match"
   )
 );
 

@@ -1,16 +1,26 @@
-import SignInWithGithubButton from "#/features/auth/components/SignInWithGithubButton";
-import SignInForm from "#/features/auth/components/forms/SignInForm";
+import SignInWithGithubButton from "#auth/components/SignInWithGithubButton";
+import SignInForm from "#auth/components/forms/SignInForm";
 import Navbar from "#/layouts/Navbar";
+import Link from "next/link";
 
 export default function SignIn() {
   return (
     <div>
       <Navbar />
-      <h1>Sign in</h1>
+      <div className="mx-auto h-full max-w-2xl p-8">
+        <h1 className="text-3xl font-bold">Sign In</h1>
+        <SignInForm />
 
-      <SignInForm />
+        <span className="block text-center text-xs font-medium text-zinc-500 uppercase">
+          or
+        </span>
 
-      <SignInWithGithubButton />
+        <SignInWithGithubButton className="w-full" />
+
+        <p className="mt-4">
+          Don't have an account? <Link href="/sign-up">Sign up</Link>
+        </p>
+      </div>
     </div>
   );
 }

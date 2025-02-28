@@ -1,6 +1,6 @@
 "use client";
 
-import { logout } from "../../actions";
+import { logout } from "#auth/actions";
 
 export default function LogoutForm() {
   return (

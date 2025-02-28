@@ -5,6 +5,12 @@ const PASSWORD_MAX_LENGTH = 100;
 
 export const passwordSchema = v.pipe(
   v.string(),
-  v.minLength(PASSWORD_MIN_LENGTH),
-  v.maxLength(PASSWORD_MAX_LENGTH)
+  v.minLength(
+    PASSWORD_MIN_LENGTH,
+    `Password must be at least ${PASSWORD_MIN_LENGTH} characters`
+  ),
+  v.maxLength(
+    PASSWORD_MAX_LENGTH,
+    `Password must be at most ${PASSWORD_MAX_LENGTH} characters`
+  )
 );

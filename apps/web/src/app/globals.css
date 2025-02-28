@@ -1,6 +1,13 @@
 @import "@repo/ui/styles.css";
 @import "tailwindcss";
 
+@layer base {
+  html {
+    background-color: #111;
+    color: #fff;
+  }
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;

@@ -5,6 +5,12 @@ const USERNAME_MAX_LENGTH = 32;
 
 export const usernameSchema = v.pipe(
   v.string(),
-  v.minLength(USERNAME_MIN_LENGTH),
-  v.maxLength(USERNAME_MAX_LENGTH)
+  v.minLength(
+    USERNAME_MIN_LENGTH,
+    `Username must be at least ${USERNAME_MIN_LENGTH} characters`
+  ),
+  v.maxLength(
+    USERNAME_MAX_LENGTH,
+    `Username must be at most ${USERNAME_MAX_LENGTH} characters`
+  )
 );
