@@ -1,4 +1,4 @@
-import { WikipediaLanguage } from "../data/languages";
+import { WIKIPEDIA_LANGUAGES, WikipediaLanguage } from "../data/languages";
 
 export const WIKIPEDIA_PROTOCOL = "https://";
 export const WIKIPEDIA_DOMAIN = "wikipedia.org";
@@ -21,15 +21,25 @@ export function titleUrlBuilder(
 
 // ---
 
-export function getLanguageFromUrl(url: string) {
+export function getLanguageFromUrl(url: string): WikipediaLanguage {
   const urlParts = url.split(".");
-  const language = urlParts[0].replace(WIKIPEDIA_PROTOCOL, "");
-  return language;
+  const language = urlParts[0]?.replace(WIKIPEDIA_PROTOCOL, "");
+
+  if (!Object.keys(WIKIPEDIA_LANGUAGES).includes(language ?? "")) {
+    throw new Error(`Invalid language: ${language}`);
+  }
+
+  return language as WikipediaLanguage;
 }
 
 export function getTitleFromUrl(url: string) {
   const urlParts = url.split(`${WIKIPEDIA_DOMAIN}${WIKIPEDIA_WIKI_PATH}`);
   const title = urlParts[1];
+
+  if (!title) {
+    throw new Error(`Invalid title: ${title}`);
+  }
+
   return title;
 }
 
@@ -39,6 +49,6 @@ export function getAPIInfosUrlFromTitle(
 ) {
   return (
     getAPIUrl(language) +
-    `?action=query&prop=extracts|pageimages&exintro&explaintext&piprop=thumbnail&pithumbsize=500&titles=${title}&format=json`
+    `?action=query&origin=*&prop=extracts|pageimages&exintro&explaintext&piprop=thumbnail&pithumbsize=500&titles=${title}&format=json`
   );
 }

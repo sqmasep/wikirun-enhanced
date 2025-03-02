@@ -14,5 +14,7 @@ export function Label({
   ...props
 }: React.ComponentProps<typeof LabelPrimitive.Root> &
   VariantProps<typeof label>) {
-  return <LabelPrimitive.Root className={cn(label(), className)} {...props} />;
+  return (
+    <LabelPrimitive.Root className={cn(label({ className }))} {...props} />
+  );
 }

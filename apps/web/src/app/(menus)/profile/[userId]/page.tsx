@@ -3,12 +3,13 @@ import Navbar from "#/layouts/Navbar";
 export default async function ProfilePage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ userId: string }>;
 }) {
+  const userId = (await params).userId;
   return (
     <div>
       <Navbar />
-      fetch id: {(await params).id}
+      fetch id: {userId}
     </div>
   );
 }

@@ -9,12 +9,6 @@ export default async function Home() {
   const a = (await cookies()).get("session_id")!;
   console.log("nextjs cookies", a);
 
-  // const data = await (
-  //   await apiClient.users.me.$get(undefined, {
-  //     headers: { cookie: (await cookies()).toString() },
-  //   })
-  // ).json();
-
   const cook = (await cookies()).toString();
   const response = await apiClient.users.me.$get(undefined, {
     headers: { cookie: cook },

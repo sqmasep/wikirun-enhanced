@@ -18,7 +18,13 @@ export default function SignIn() {
         <SignInWithGithubButton className="w-full" />
 
         <p className="mt-4">
-          Don't have an account? <Link href="/sign-up">Sign up</Link>
+          Don't have an account?{" "}
+          <Link
+            className="text-blue-300 underline hover:decoration-2"
+            href="/sign-up"
+          >
+            Sign up
+          </Link>
         </p>
       </div>
     </div>

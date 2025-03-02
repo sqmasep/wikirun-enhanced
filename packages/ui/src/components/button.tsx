@@ -12,14 +12,35 @@ export type ButtonProps = Omit<
   };
 
 const button = cva(
-  "inline-flex items-center justify-center gap-3 rounded-md px-2 py-1 text-center text-sm whitespace-nowrap [&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0",
+  [
+    "inline-flex items-center justify-center gap-3 rounded-xl px-2 py-1 text-center whitespace-nowrap select-none",
+    "outline-offset-0 transition-[outline-offset] duration-[20ms] ease-in-out",
+    "focus-visible:outline-2 focus-visible:outline-offset-2",
+    "[&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0",
+  ],
   {
     variants: {
-      color: { a: "", primary: "bg-blue-300 text-black" },
+      color: {
+        primary: [
+          "bg-blue-950 text-blue-100",
+          "focus-visible:outline-blue-500",
+        ],
+        secondary: [
+          "bg-zinc-900 text-gray-100",
+          "focus-visible:outline-zinc-500",
+        ],
+      },
+
+      size: {
+        sm: "px-1.5 py-0.5 text-xs",
+        md: "px-4 py-2 text-sm",
+        lg: "px-3 py-1.5 text-base",
+      },
     },
 
     defaultVariants: {
       color: "primary",
+      size: "md",
     },
   },
 );

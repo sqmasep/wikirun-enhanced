@@ -1,5 +1,5 @@
 {
-  "name": "@repo/validation",
+  "name": "@repo/wikipedia",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "./*": "./src/*.ts"
   },
   "dependencies": {
+    "@repo/validation": "*",
     "valibot": "^1.0.0-beta.9"
   }
 }

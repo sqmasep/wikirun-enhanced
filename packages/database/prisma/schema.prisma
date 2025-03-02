@@ -25,6 +25,16 @@ model User {
   hashedPassword  String?
   github_id       Int?      @unique
   Session         Session[]
+  Map             Map[]
 
   @@unique([email, github_id])
+}
+
+model Map {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  creatorId String
+  Creator   User     @relation(fields: [creatorId], references: [id])
 }

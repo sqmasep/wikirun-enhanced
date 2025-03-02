@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import useSignInForm from "#auth/hooks/useSignInForm";
+import Link from "next/link";
 
 export default function SignInForm() {
   const { form, signIn } = useSignInForm();
@@ -48,7 +49,14 @@ export default function SignInForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full mt-4">
+
+        <div className="flex justify-end">
+          <Link className="text-blue-300 underline" href="/">
+            I forgot my password
+          </Link>
+        </div>
+
+        <Button type="submit" className="mt-4 w-full">
           Sign In
         </Button>
       </form>
