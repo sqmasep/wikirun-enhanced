@@ -12,6 +12,7 @@ export function getAPIUrl(language: WikipediaLanguage): string {
   return `${WIKIPEDIA_PROTOCOL}${language}.${WIKIPEDIA_DOMAIN}${WIKIPEDIA_API_PATH}`;
 }
 
+// TODO rename this function
 export function titleUrlBuilder(
   language: WikipediaLanguage,
   title: string
@@ -37,18 +38,55 @@ export function getTitleFromUrl(url: string) {
   const title = urlParts[1];
 
   if (!title) {
-    throw new Error(`Invalid title: ${title}`);
+    throw new Error(
+      `Invalid URL format: could not retreive title from "${url}"`
+    );
   }
 
   return title;
 }
 
 export function getAPIInfosUrlFromTitle(
-  language: Parameters<typeof titleUrlBuilder>[0],
-  title: Parameters<typeof titleUrlBuilder>[1]
+  language: Parameters<typeof getAPIUrl>[0],
+  title: string
 ) {
-  return (
-    getAPIUrl(language) +
-    `?action=query&origin=*&prop=extracts|pageimages&exintro&explaintext&piprop=thumbnail&pithumbsize=500&titles=${title}&format=json`
-  );
+  const apiUrl = getAPIUrl(language);
+
+  const options = new URLSearchParams({
+    action: "query",
+    origin: "*",
+    prop: "extracts|pageimages",
+    exintro: "",
+    explaintext: "",
+    piprop: "thumbnail",
+    pithumbsize: "500",
+    titles: title,
+    format: "json",
+  });
+
+  const url = `${apiUrl}?${options}`;
+
+  return url;
+  // return (
+  //   getAPIUrl(language) +
+  //   `?action=query&origin=*&prop=extracts|pageimages&exintro&explaintext&piprop=thumbnail&pithumbsize=500&titles=${title}&format=json`
+  // );
+}
+
+export function getRawHTMLUrlFromTitle(
+  language: Parameters<typeof getAPIUrl>[0],
+  title: string
+) {
+  const apiUrl = getAPIUrl(language);
+
+  const options = new URLSearchParams({
+    action: "parse",
+    origin: "*",
+    page: title,
+    format: "json",
+  });
+
+  const url = `${apiUrl}?${options}`;
+
+  return url;
 }
